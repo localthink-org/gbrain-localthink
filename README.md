@@ -9,6 +9,14 @@
 
 Both land in one git repository you own — so your knowledge and your conversations become portable text with history, diffable and durable forever.
 
+## Links
+
+- https://localthink.org
+- https://localthink.org/ltf-builder
+- Chrome Web Store LTF Builder: https://chromewebstore.google.com/detail/ltf-builder/icpjoemgdpkmllkngcpndocnalodhfaj
+- Mac download: https://localthink.ai/download
+- Format repo: https://github.com/localthink-org/localthink-format
+
 ## Why
 
 Agent platforms give you weak or no conversation export. Knowledge tools live in local databases you rarely back up. If a machine dies, both are gone.
