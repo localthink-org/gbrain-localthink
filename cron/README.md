@@ -32,5 +32,7 @@ Make sure `$HOME/.profile` (or equivalent) has `gbrain` and any needed tool on P
 ## Notes
 
 - The script is **idempotent**: no-change runs skip the push entirely.
-- Empty sessions and blocked secrets don't abort the whole run — they are counted in the script's summary line.
-- Logs go to stdout (or your log file); check them via the cron deliver target or the log path.
+- Empty sessions and sessions the converter blocks are counted in the converter summary. A blocked session deletes its previous `.ltf.md` and hash so a stale copy is not committed. That does not abort the converter.
+- The repo-wide secret scan is different: a hit exits `backup.sh` with code 2 and does not push.
+- `git push` failures are printed to stderr and exit non-zero. The script retries once after `git pull --rebase`. Redirect stderr into the cron log (`2>&1`) or a failed push is only visible if you capture it.
+- Logs go to stdout and stderr (or your log file); check them via the cron deliver target or the log path.

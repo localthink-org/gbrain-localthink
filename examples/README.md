@@ -1,8 +1,8 @@
 # Example LTF Files
 
-Two minimal, non-commercial sample conversations exported from real sessions:
+Two fictional sample conversations written to show the format. They are not exports of real sessions. Addresses in example 1 are documentation values from RFC 5737, plus a locally administered MAC (`02:00:00:00:00:01`).
 
-- `example-1-session-greeting.ltf.md` — the shortest possible LTF: a greeting exchange with one tool call
-- `example-2-session-research.ltf.md` — a research-trigger session (no tool calls, one turn)
+- `example-1-session-greeting.ltf.md` — a short greeting, a move into a made-up demo office, and one summarized tool line
+- `example-2-session-research.ltf.md` — a one-turn research prompt with no tool calls
 
-Both are `visibility: private` in their own environment; you would bump to `public` only when publishing a demo deliberately.
+Both use `visibility: private`. Publish a demo only by deliberately changing that.
