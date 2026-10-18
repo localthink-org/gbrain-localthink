@@ -27,16 +27,20 @@ GBrain is local-first (PGlite, no server), keyword-plus-hybrid RAG, and has a re
 
 ## The sanitize-first principle
 
-Similar to how professional pipelines treat network egress as a boundary, this kit treats **git push as a boundary**. Nothing plaintext-secret-shaped crosses it. Two layers:
+Similar to how professional pipelines treat network egress as a boundary, this kit treats **git push as a boundary**. Nothing plaintext-secret-shaped crosses it. Two layers, one list of rules:
 
-1. Per-file: converter redacts (`sk-…`, `ghp_…`, AWS, Slack, resend, Groq, Google, and inline base64 image data)
-2. Repo-wide: `backup.sh` greps the full export + conversations tree before committing; a hit blocks push with exit code 2
+1. Per-file: the converter redacts secrets and incidental PII (private IPs, MACs, emails) while it writes `.ltf.md`. String frontmatter is JSON-quoted so a title cannot break the YAML.
+2. Repo-wide: `backup.sh` runs `ltf_converter.py --scan` on `export/` and `conversations/` before committing. A hit blocks the push with exit code 2. The shell script does not keep a second copy of the regex.
+
+PII markers are not scan failures. GBrain pages are the user's notes; a LAN address there may be intentional. Session tool output is redacted because it usually captured the address by accident.
 
 Rule of thumb: **if even one secret pattern slips past the per-file pass, you want the repo-wide gate to catch it — and you want to investigate why the first layer missed.**
 
+A session that still matches after redaction is not written. Its previous `.ltf.md` and hash marker are removed so an older, unredacted copy is not what gets committed.
+
 ## Idempotency detail
 
-Each converted LTF file has a content-hash marker (`.session_id.hash`). On rerun, conversions with identical content skip the write — so a daily cron doesn't grow the repo with unchanged sessions.
+Each converted LTF file has a content-hash marker (`.session_id.hash`). On rerun, conversions with identical content skip the write — so a daily cron doesn't grow the repo with unchanged sessions. The hash is checked only after the secret gate: a blocked session never keeps a hash that would skip a later clean run, and the stale file is deleted first.
 
 ## Adapting to other agent platforms
 
